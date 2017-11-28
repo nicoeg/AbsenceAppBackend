@@ -15,3 +15,5 @@ Route::get('students', "WebUntisController@GetStudents");
 Route::get('groups', "WebUntisController@GetGroups");
 Route::get('users', "WebUntisController@GetUsers");
 Route::get('usergroups', "WebUntisController@GetUserGroups");
+
+Route::post('login', 'Api\ApiLoginController@store');
