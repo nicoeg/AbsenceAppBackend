@@ -16,8 +16,8 @@ class CreateAbsenceMessagesTable extends Migration
         Schema::create('absence_messages', function (Blueprint $table) {
             $table->increments('id');
             $table->string('message');
-            $table->dateTime('start');
-            $table->dateTime('end');
+            $table->dateTime('started_at');
+            $table->dateTime('ended_at');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

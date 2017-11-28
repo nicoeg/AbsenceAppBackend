@@ -15,10 +15,11 @@ class CreateAttendancesTable extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->increments('id');
-            $table->double('latitude');
-            $table->double('longitude');
-            $table->dateTime('start');
-            $table->dateTime('end');
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
+            $table->dateTime('started_at');
+            $table->dateTime('ended_at')->nullable();
+            $table->boolean('accepted')->nullable();
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
