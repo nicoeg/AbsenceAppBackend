@@ -17,3 +17,9 @@ Route::get('users', "WebUntisController@GetUsers");
 Route::get('usergroups', "WebUntisController@GetUserGroups");
 
 Route::post('login', 'Api\ApiLoginController@store');
+
+Route::post('test', function() {
+	\Log::info(request()->all());
+
+	return response()->json(['status' => 'ok']);
+});
