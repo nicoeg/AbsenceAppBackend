@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 
-class ApiLoginController extends Controller
+class LoginController extends Controller
 {
     public function store() {
     	$validated = $this->validate(request(), [
