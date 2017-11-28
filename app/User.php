@@ -26,4 +26,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function AbsenceMessages() {
+        return $this->hasMany(AbsenceMessage::class);
+    }
+
+    public function Attendances() {
+        return $this->hasMany(Attendance::class);
+    }
 }
