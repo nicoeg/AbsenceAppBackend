@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AttendanceController extends Controller {
+    public function Index() {
+        return Attendance::all();
+    }
+
     public function Store() {
         Attendance::create([
             "started_at" => request('started_at'),

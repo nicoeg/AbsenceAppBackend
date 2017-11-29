@@ -8,6 +8,10 @@ use App\Http\Controllers\Controller;
 
 class AbsenceMessageController extends Controller {
 
+    public function Index() {
+        return AbsenceMessage::all();
+    }
+
     public function Store() {
         AbsenceMessage::create([
             "message" => request('message'),
