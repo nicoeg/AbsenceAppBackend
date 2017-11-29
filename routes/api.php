@@ -18,6 +18,14 @@ Route::get('usergroups', "WebUntisController@GetUserGroups");
 
 Route::post('login', 'Api\LoginController@store');
 
+Route::post('message', 'Api\AbsenceMessageController@Store');
+
+Route::post('attendance', 'Api\AttendanceController@Store');
+Route::put('attendance', 'Api\AttendanceController@Update');
+Route::put('attendance-accept', 'Api\AttendanceController@AcceptAttendance');
+Route::put('attendance-decline', 'Api\AttendanceController@DeclineAttendance');
+Route::post('attendance-outside-school', 'Api\AttendanceController@AttendanceOutsideSchool');
+
 Route::post('test', function() {
 	\Log::info(request()->all());
 
