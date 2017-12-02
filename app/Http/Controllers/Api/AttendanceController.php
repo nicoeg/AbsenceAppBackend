@@ -8,16 +8,21 @@ use App\Http\Controllers\Controller;
 
 class AttendanceController extends Controller {
     public function Index() {
-        return Attendance::all();
+        return response()->json(Attendance::all());
     }
 
+    public function Show($id) {
+        return response()->json(Attendance::find($id));
+    }
     public function Store() {
-        Attendance::create([
+        $attendance = Attendance::create([
             "started_at" => request('started_at'),
+            "latitude" => request('latitude') ? request('latitude') : null,
+            "longitude" => request('longitude') ? request('longitude') : null,
             "user_id" => request('user_id')
         ]);
 
-        return response('Attendance registered');
+        return response()->json($attendance->id);
     }
 
     public function Update() {
@@ -28,17 +33,6 @@ class AttendanceController extends Controller {
                   ]);
 
         return response('Attendance Updated');
-    }
-
-    public function AttendanceOutsideSchool() {
-        Attendance::create([
-            "started_at" => request('started_at'),
-            "latitude" => request('latitude'),
-            "longitude" => request('longitude'),
-            "user_id" => request('user_id')
-        ]);
-
-        return response('Attendance registered');
     }
 
     public function AcceptAttendance() {
