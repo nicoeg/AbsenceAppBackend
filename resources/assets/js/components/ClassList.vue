@@ -1,35 +1,22 @@
 <template>
     <v-container fluid="fluid" class="text-xs-center">
         <v-layout row wrap>
-            <v-flex xs12 sm6><span>Raised Light Theme</span>
-                <v-card height="185px" flat color="white">
-                    <v-card-text>
-                        <div>
-                            <v-btn color="primary">Primary</v-btn>
-                        </div>
-                        <div>
-                            <v-btn color="error">Error</v-btn>
-                        </div>
-                        <div>
-                            <v-btn light disabled>Disabled</v-btn>
-                        </div>
-                    </v-card-text>
-                </v-card>
-            </v-flex>
-            <v-flex xs12 sm6><span>Raised Dark Theme</span>
-                <v-card height="185px" flat color="secondary">
-                    <v-card-text>
-                        <div>
-                            <v-btn color="primary" dark>Primary</v-btn>
-                        </div>
-                        <div>
-                            <v-btn color="error" dark>Error</v-btn>
-                        </div>
-                        <div>
-                            <v-btn color="primary" dark disabled>Disabled</v-btn>
-                        </div>
-                    </v-card-text>
-                </v-card>
+            <v-flex xs12 sm12>
+                <v-list>
+                    <template v-for="item in classesFiltered">
+                        <v-list-tile
+                            :key="item.name"
+                            ripple
+                            @click="classClicked(item)"
+                        >
+                            <v-list-tile-content>
+                                <v-list-tile-title v-text="item.name"></v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+
+                        <v-divider :key="item.name"></v-divider>
+                    </template>
+                </v-list>
             </v-flex>
         </v-layout>
     </v-container>
@@ -37,8 +24,37 @@
 
 <script>
     export default {
+        props: ['user', 'search'],
+
+        data() {
+            return {
+                classes: [
+                    { id: 1, name: 'First' },
+                    { id: 2, name: 'Second' },
+                    { id: 3, name: 'Third' },
+                    { id: 4, name: 'Fourth' }
+                ]
+            }
+        },
+
+        computed: {
+            classesFiltered() {
+                const search = this.search.toLowerCase()
+
+                return this.classes.filter(item => {
+                    return item.name.toLowerCase().includes(search)
+                })
+            }
+        },
+
+        methods: {
+            classClicked(item) {
+                this.$router.push('/students/' + item.id)
+            }
+        },
+
         mounted() {
-            console.log('Component mounted.')
+
         }
     }
 </script>

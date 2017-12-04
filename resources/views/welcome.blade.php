@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <class-list></class-list>
+    <transition name="slide-x-transition">
+        <router-view
+            style="position: absolute;"
+            :user="{{ auth()->user()->toJson() }}"
+            :search="search"
+        ></router-view>
+    </transition>
 @endsection

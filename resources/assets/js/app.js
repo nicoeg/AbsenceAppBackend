@@ -12,18 +12,54 @@ require("./bootstrap")
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import Vue from 'vue'
-import Vuetify from 'vuetify'
-
 import '../../../node_modules/vuetify/dist/vuetify.min.css'
 
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Vuetify from 'vuetify'
+
+Vue.use(VueRouter)
 Vue.use(Vuetify)
 
 import ClassList from './components/ClassList.vue'
+import StudentList from './components/StudentList.vue'
 import Login from './components/Login.vue'
 
+const routes = [
+    { path: '/', component: ClassList, meta: { title: 'Klasser', searchable: true } },
+    { path: '/students/:id', component: StudentList, meta: { title: 'Studerende' } },
+]
+
+const router = new VueRouter({
+    routes
+})
+
 const app = new Vue({
-    components: { ClassList, Login },
+    router,
+
+    components: { Login },
     
-    el: "#app"
+    el: "#app",
+
+    data: {
+        drawer: false,
+        searching: false,
+        search: ''
+    },
+
+    methods: {
+        navigateTo(to) {
+            router.push(to)
+
+            this.drawer = false
+        },
+
+        toggleSearching() {
+            this.searching = !this.searching
+
+            if (this.searching) {
+                this.$nextTick(() => this.$refs.searchInput.focus())
+            }
+        }
+    }
 })

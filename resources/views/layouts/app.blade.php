@@ -18,7 +18,42 @@
 <body>
     <div id="app">
         <v-app>
-            @yield('content')
+            <v-navigation-drawer app fixed disable-route-watcher v-model="drawer">
+                <v-list dense>
+                    <v-list-tile @click="navigateTo('/')">
+                        <v-list-tile-action>
+                            <v-icon>home</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Klasser</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list>
+            </v-navigation-drawer>
+            <v-toolbar app fixed color="indigo" dark>
+                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+                <v-toolbar-title v-text="$route.meta.title"></v-toolbar-title>
+
+                <div v-if="$route.meta.searchable" class="d-flex align-center" style="margin-left: auto; height: 30px">
+                    <v-btn v-if="!searching" icon @click="toggleSearching">
+                        <v-icon>search</v-icon>
+                    </v-btn>
+
+                    <v-text-field
+                        v-else
+                        v-model="search"
+                        append-icon="search"
+                        ref="searchInput"
+                        @blur="toggleSearching"
+                    ></v-text-field>
+                </div>
+            </v-toolbar>
+
+            <v-content>
+                @yield('content')
+            </v-content>
+
+            <v-footer app></v-footer>
         </v-app>
     </div>
 
