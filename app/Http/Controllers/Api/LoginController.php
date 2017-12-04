@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -23,11 +24,11 @@ class LoginController extends Controller
 
     public function createUser() {
         $user = User::create([
-            "name" => request('started_at'),
+            "name" => request('name'),
             "username" => request('username'),
             "password" => Hash::make(request('password')),
             "api_token" => request('api_token'),
-            "group_id" => request('group_id')
+            "group_id" => request('group_id'),
         ]);
 
         return response()->json($user->id);
