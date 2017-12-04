@@ -20,4 +20,17 @@ class LoginController extends Controller
 
     	return response()->json(User::where('username', request('username'))->first());
     }
+
+    public function createUser() {
+        $user = User::create([
+            "name" => request('started_at'),
+            "username" => request('username'),
+            "password" => Hash::make(request('password')),
+            "api_token" => request('api_token'),
+            "group_id" => request('group_id')
+        ]);
+
+        return response()->json($user->id);
+
+    }
 }

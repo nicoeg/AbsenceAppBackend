@@ -13,6 +13,7 @@ Route::get('users', "WebUntisController@GetUsers");
 Route::get('usergroups', "WebUntisController@GetUserGroups");
 
 Route::post('login', 'Api\LoginController@store');
+Route::post('create-user', 'Api\LoginController@createUser');
 
 Route::get('lessons', "WebUntisController@GetLessons");
 Route::get('lessons/weekly', "WebUntisController@GetLessonsWeekly");
