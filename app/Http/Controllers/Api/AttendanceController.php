@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Attendance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller {
     public function Index() {
@@ -14,6 +16,7 @@ class AttendanceController extends Controller {
     public function Show($id) {
         return response()->json(Attendance::find($id));
     }
+
     public function Store() {
         $attendance = Attendance::create([
             "started_at" => request('started_at'),
@@ -41,6 +44,7 @@ class AttendanceController extends Controller {
                   ->update([
                       "accepted" => true,
                   ]);
+
         return response('Attendance accepted');
     }
 
@@ -50,6 +54,47 @@ class AttendanceController extends Controller {
                   ->update([
                       "accepted" => false,
                   ]);
+
         return response('Attendance declined');
+    }
+
+    public function ByUser($id) {
+        return response()->json(Attendance::where('user_id', $id)->get());
+    }
+
+    public function ByUserWeekly($id, $year = null, $week = null) {
+        if ($year == null || $week == null) {
+            $start = Carbon::now()->startOfWeek()->format('Y-m-d');
+            $end   = Carbon::now()->endOfWeek()->format('Y-m-d');
+        } else {
+            $date  = Carbon::now()->setISODate($year, $week);
+            $start = $date->startOfWeek()->format('Y-m-d');
+            $end   = $date->endOfWeek()->format('Y-m-d');
+        }
+        DB::enableQueryLog();
+        $attendances = Attendance::where('user_id', $id)
+                                 ->where('started_at', '>', $start)
+                                 ->where('started_at', '<', $end)
+                                 ->get();
+        dd(DB::getQueryLog());
+
+        return response()->json($attendances);
+    }
+
+    public function ByUserMonthly($id, $year = null, $month = null) {
+        if ($year == null || $month == null) {
+            $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $end   = Carbon::now()->endOfMonth()->format('Y-m-d');
+        } else {
+            $date  = Carbon::now()->setISODate($year, $month);
+            $start = $date->startOfMonth()->format('Y-m-d');
+            $end   = $date->endOfMonth()->format('Y-m-d');
+        }
+        $attendances = Attendance::where('user_id', $id)
+                                 ->where('started_at', '<', $start)
+                                 ->where('started_at', '>', $end)
+                                 ->get();
+
+        return response()->json($attendances);
     }
 }

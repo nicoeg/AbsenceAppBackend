@@ -16,10 +16,12 @@ Route::post('login', 'Api\LoginController@store');
 
 Route::get('lessons', "WebUntisController@GetLessons");
 Route::get('lessons/weekly', "WebUntisController@GetLessonsWeekly");
-Route::get('lessons/weekly?week={week}&year={year}', "WebUntisController@GetLessonsWeekly");
-Route::get('lessons/monthly', "WebUntisController@GetLessonsWeekly");
-Route::get('lessons/monthly?month={month}&year={year}', "WebUntisController@GetLessonsWeekly");
-Route::get('lessons/periode?start={start}&end={end}', "WebUntisController@GetLessonsPeriode");
+Route::get('lessons/weekly/{week}/{year}', "WebUntisController@GetLessonsWeekly");
+
+Route::get('lessons/monthly', "WebUntisController@GetLessonsMonthly");
+Route::get('lessons/monthly/{month}/{year}', "WebUntisController@GetLessonsMonthly");
+
+Route::get('lessons/periode/{start}/{end}', "WebUntisController@GetLessonsPeriode");
 
 Route::get('message', 'Api\AbsenceMessageController@Index');
 Route::get('message/{id}', 'Api\AbsenceMessageController@Show');
@@ -27,6 +29,11 @@ Route::post('message', 'Api\AbsenceMessageController@Store');
 
 Route::get('attendance', 'Api\AttendanceController@Index');
 Route::get('attendance/{id}', 'Api\AttendanceController@Show');
+Route::get('attendance/user/{id}', 'Api\AttendanceController@ByUser');
+Route::get('attendance/user/{id}/weekly', 'Api\AttendanceController@ByUserWeekly');
+Route::get('attendance/user/{id}/weekly/{week}/{year}', 'Api\AttendanceController@ByUserWeekly');
+Route::get('attendance/user/{id}/monthly', 'Api\AttendanceController@ByUserMonthly');
+Route::get('attendance/user/{id}/monthly/{month}/{year}', 'Api\AttendanceController@ByUserMonthly');
 Route::post('attendance', 'Api\AttendanceController@Store');
 Route::put('attendance', 'Api\AttendanceController@Update');
 Route::put('attendance-accept', 'Api\AttendanceController@AcceptAttendance');
