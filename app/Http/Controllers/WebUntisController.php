@@ -13,10 +13,13 @@ class WebUntisController extends Controller {
     }
 
     public function GetLessons() {
-        $ids = collect($this->webuntis->request('GET', "groups/2353/lessons"))->map(function ($item) {
+        $ids = $this->webuntis->request('GET', "groups/2353/lessons");
+        if ($ids == []) {
+            return response()->json($ids);
+        }
+        $ids = collect($ids)->map(function ($item) {
             return $item->untis_id;
         })->implode(',');
-
         $lessons = $this->webuntis->request("GET", "lessons?untis_ids=$ids");
         $subject_ids = collect($lessons)->map(function ($item) {
             return $item->subjects[0];
@@ -36,10 +39,10 @@ class WebUntisController extends Controller {
     }
 
     public function GetLessonsMonthly($month = null, $year = null) {
-        if($month == null || $year == null){
+        if ($month == null || $year == null) {
             $start = Carbon::now()->startOfMonth()->format('Y-m-d');
             $end = Carbon::now()->endOfMonth()->format('Y-m-d');
-        } else{
+        } else {
             $date = Carbon::now()->setDate($year, $month, 1);
             $start = $date->startOfMonth()->format('Y-m-d');
             $end = $date->endOfMonth()->format('Y-m-d');
@@ -48,28 +51,12 @@ class WebUntisController extends Controller {
         return response()->json($this->LessonsFromDates($start, $end));
     }
 
-    public function GetLessonsWeekly($week = null, $year = null) {
-        if($week == null || $year == null){
-            $start = Carbon::now()->startOfWeek()->format('Y-m-d');
-            $end = Carbon::now()->endOfWeek()->format('Y-m-d');
-        } else{
-            $date = Carbon::now()->setISODate($year, $week);
-            $start = $date->startOfWeek()->format('Y-m-d');
-            $end = $date->endOfWeek()->format('Y-m-d');
-        }
-
-        return response()->json($this->LessonsFromDates($start, $end));
-    }
-
-    public function GetLessonsPeriode($start = null, $end = null) {
-        $start = $start == null ? Carbon::now()->startOfWeek()->format('Y-m-d') : $start;
-        $end = $end == null ? Carbon::now()->endOfWeek()->format('Y-m-d') : $end;
-
-        return response()->json($this->LessonsFromDates($start, $end));
-    }
-
     public function LessonsFromDates($start, $end) {
-        $ids = collect($this->webuntis->request('GET', "groups/2353/lessons?start=$start&end=$end"))->map(function ($item) {
+        $ids = $this->webuntis->request('GET', "groups/2353/lessons?start=$start&end=$end");
+        if ($ids == []) {
+            return $ids;
+        }
+        $ids = collect($ids)->map(function ($item) {
             return $item->untis_id;
         })->implode(',');
 
@@ -87,9 +74,29 @@ class WebUntisController extends Controller {
                 }
             }
         }
+
         return $lessons;
     }
 
+    public function GetLessonsWeekly($week = null, $year = null) {
+        if ($week == null || $year == null) {
+            $start = Carbon::now()->startOfWeek()->format('Y-m-d');
+            $end = Carbon::now()->endOfWeek()->format('Y-m-d');
+        } else {
+            $date = Carbon::now()->setISODate($year, $week);
+            $start = $date->startOfWeek()->format('Y-m-d');
+            $end = $date->endOfWeek()->format('Y-m-d');
+        }
+
+        return response()->json($this->LessonsFromDates($start, $end));
+    }
+
+    public function GetLessonsPeriode($start = null, $end = null) {
+        $start = $start == null ? Carbon::now()->startOfWeek()->format('Y-m-d') : $start;
+        $end = $end == null ? Carbon::now()->endOfWeek()->format('Y-m-d') : $end;
+
+        return response()->json($this->LessonsFromDates($start, $end));
+    }
 
     public function GetSchools() {
         $ids = collect($this->webuntis->request('GET', "schools"))->map(function ($item) {
