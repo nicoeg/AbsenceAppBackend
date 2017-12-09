@@ -62,7 +62,7 @@ class AttendanceController extends Controller {
         return response()->json(Attendance::where('user_id', $id)->get());
     }
 
-    public function ByUserWeekly($id, $year = null, $week = null) {
+    public function ByUserWeekly($id, $week = null, $year = null) {
         if ($year == null || $week == null) {
             $start = Carbon::now()->startOfWeek()->format('Y-m-d');
             $end   = Carbon::now()->endOfWeek()->format('Y-m-d');
@@ -71,28 +71,26 @@ class AttendanceController extends Controller {
             $start = $date->startOfWeek()->format('Y-m-d');
             $end   = $date->endOfWeek()->format('Y-m-d');
         }
-        DB::enableQueryLog();
+
         $attendances = Attendance::where('user_id', $id)
                                  ->where('started_at', '>', $start)
                                  ->where('started_at', '<', $end)
                                  ->get();
-        dd(DB::getQueryLog());
 
         return response()->json($attendances);
     }
 
-    public function ByUserMonthly($id, $year = null, $month = null) {
+    public function ByUserMonthly($id, $month = null, $year = null) {
         if ($year == null || $month == null) {
             $start = Carbon::now()->startOfMonth()->format('Y-m-d');
             $end   = Carbon::now()->endOfMonth()->format('Y-m-d');
         } else {
-            $date  = Carbon::now()->setISODate($year, $month);
-            $start = $date->startOfMonth()->format('Y-m-d');
-            $end   = $date->endOfMonth()->format('Y-m-d');
+            $start = Carbon::create($year, $month, 1)->startOfMonth()->format('Y-m-d');
+            $end   = Carbon::create($year, $month, 1)->endOfMonth()->format('Y-m-d');
         }
         $attendances = Attendance::where('user_id', $id)
-                                 ->where('started_at', '<', $start)
-                                 ->where('started_at', '>', $end)
+                                 ->where('started_at', '>', $start)
+                                 ->where('started_at', '<', $end)
                                  ->get();
 
         return response()->json($attendances);
