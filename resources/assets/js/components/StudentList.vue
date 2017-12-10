@@ -1,7 +1,7 @@
 <template>
     <v-container fluid="fluid" class="text-xs-center">
         <v-layout row wrap>
-            <v-flex xs12 sm8>
+            <v-flex xs12 :sm8="selectedAttendance !== null">
                 <div class="navigation">
                     <div class="date">
                         <v-btn color="primary" icon @click="jumpDays(-1)">
@@ -38,8 +38,12 @@
                             </v-list-tile-content>
 
                             <v-list-tile-action>
-                                <div style="width:24px">
-                                    <v-checkbox v-model="attendance.accepted"></v-checkbox>
+                                <div class="list-action">
+                                    <a @click="selectAttendance(attendance)">Se position</a>
+
+                                    <div style="width:24px">
+                                        <v-checkbox v-model="attendance.accepted"></v-checkbox>
+                                    </div>
                                 </div>
                             </v-list-tile-action>
                         </v-list-tile>
@@ -72,6 +76,19 @@
                     </v-list>
                 </template>
             </v-flex>
+            <v-flex v-if="selectedAttendance" xs12 sm4 style="padding-left: 30px;">
+                <v-btn color="primary" @click="selectedAttendance = null">Luk</v-btn>
+                <gmap-map
+                    style="height: 300px"
+                    :center="selectedAttendance"
+                    :zoom="12"
+                >
+                    <gmap-marker
+                        :position="selectedAttendance"
+                        :clickable="true"
+                    ></gmap-marker>
+                </gmap-map>
+            </v-flex>
         </v-layout>
     </v-container>
 </template>
@@ -87,7 +104,8 @@
                 attendances: null,
                 manualCheck: false,
                 autoCheck: false,
-                date: null
+                date: null,
+                selectedAttendance: null
             }
         },
 
@@ -136,6 +154,9 @@
                 })
 
                 axios.put('api/attendance/bulk', { attendances })
+            },
+            selectAttendance(attendance) {
+                this.selectedAttendance = { lat: attendance.latitude, lng: attendance.longitude }
             }
         },
 
@@ -165,5 +186,14 @@
 
     .navigation .date {
         max-width: 300px;
+    }
+
+    .list-action {
+        display: flex;
+        align-items: center;
+    }
+
+    .list-action a {
+        margin-right: 10px;
     }
 </style>

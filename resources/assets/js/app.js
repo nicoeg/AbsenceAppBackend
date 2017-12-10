@@ -17,9 +17,15 @@ import '../../../node_modules/vuetify/dist/vuetify.min.css'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: 'AIzaSyCyGJh65QtxefTFoe9tFmWprh6EKWDwQP4'
+    }
+})
 
 import ClassList from './components/ClassList.vue'
 import StudentList from './components/StudentList.vue'
