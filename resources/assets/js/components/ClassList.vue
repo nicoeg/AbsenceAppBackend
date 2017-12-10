@@ -2,7 +2,9 @@
     <v-container fluid="fluid" class="text-xs-center">
         <v-layout row wrap>
             <v-flex xs12 sm12>
-                <v-list>
+                <v-progress-circular v-if="classes === null" indeterminate color="primary"></v-progress-circular>
+
+                <v-list v-else>
                     <template v-for="item in classesFiltered">
                         <v-list-tile
                             :key="item.name"
@@ -12,6 +14,7 @@
                             <v-list-tile-content>
                                 <v-list-tile-title v-text="item.name"></v-list-tile-title>
                             </v-list-tile-content>
+                            <v-list-tile-action v-if="item.unaccepted > 0" style="color: red;" v-text="item.unaccepted"></v-list-tile-action>
                         </v-list-tile>
 
                         <v-divider :key="item.name"></v-divider>
@@ -28,17 +31,14 @@
 
         data() {
             return {
-                classes: [
-                    { id: 1, name: 'First' },
-                    { id: 2, name: 'Second' },
-                    { id: 3, name: 'Third' },
-                    { id: 4, name: 'Fourth' }
-                ]
+                classes: null
             }
         },
 
         computed: {
             classesFiltered() {
+                if (!this.classes) return []
+
                 const search = this.search.toLowerCase()
 
                 return this.classes.filter(item => {
@@ -54,7 +54,10 @@
         },
 
         mounted() {
-
+            axios.get('api/user/' + this.user.id + '/groups?api_token=' + this.user.api_token)
+                .then(response => {
+                    this.classes = response.data
+                })
         }
     }
 </script>

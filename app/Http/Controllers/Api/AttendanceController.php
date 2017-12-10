@@ -38,6 +38,13 @@ class AttendanceController extends Controller {
         return response('Attendance Updated');
     }
 
+    public function BulkUpdate() {
+        foreach (request('attendances') as $attendance) {
+            Attendance::where('id', $attendance['id'])
+                ->update(['accepted' => $attendance['accepted']]);
+        }
+    }
+
     public function AcceptAttendance() {
         Attendance::where('id', request('attendance_id'))
                   ->where('user_id', request('user_id'))

@@ -27,11 +27,19 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $casts = [
+        'teacher' => 'boolean'
+    ];
+
     public function AbsenceMessages() {
         return $this->hasMany(AbsenceMessage::class);
     }
 
     public function Attendances() {
         return $this->hasMany(Attendance::class);
+    }
+
+    public function groups() {
+        return $this->belongsToMany(Group::class, 'group_user');
     }
 }

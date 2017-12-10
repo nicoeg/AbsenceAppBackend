@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 
+Route::get('user/{id}/groups', 'Api\UserGroupsController@index')->middleware('auth:api');
+Route::get('group/{id}/attendance', 'Api\GroupAttendanceController@index');
+Route::put('attendance/bulk', 'Api\AttendanceController@BulkUpdate');
 
 Route::get('schools', "WebUntisController@GetSchools");
 Route::get('teachers', "WebUntisController@GetTeachers");
