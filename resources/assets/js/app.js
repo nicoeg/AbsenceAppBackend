@@ -20,7 +20,14 @@ import Vuetify from 'vuetify'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
 Vue.use(VueRouter)
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+    theme: {
+        primary: '#006E79',
+        secondary: '#b0bec5',
+        accent: '#006E79',
+        error: '#b71c1c'
+    }
+})
 Vue.use(VueGoogleMaps, {
     load: {
         key: 'AIzaSyCyGJh65QtxefTFoe9tFmWprh6EKWDwQP4'

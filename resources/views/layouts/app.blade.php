@@ -30,7 +30,7 @@
                     </v-list-tile>
                 </v-list>
             </v-navigation-drawer>
-            <v-toolbar app fixed color="indigo" dark>
+            <v-toolbar app fixed color="primary" dark>
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                 <v-toolbar-title v-text="$route.meta.title"></v-toolbar-title>
 

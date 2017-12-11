@@ -13,7 +13,7 @@
                         </v-btn>
                     </div>
 
-                    <v-btn color="primary" @click="saveAttendanceRegistration">
+                    <v-btn v-if="attendances !== null || attendances && attendances.length !== 0" color="primary" @click="saveAttendanceRegistration">
                         Registrer
                     </v-btn>
                 </div>
