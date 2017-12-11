@@ -22,6 +22,22 @@
 
                 <h2 v-if="attendances && attendances.length === 0" style="text-align: left;margin: 10px 0;">Ingen indtjekninger</h2>
 
+                <div v-if="absence && absence.length > 0" class="list-header">
+                    <h2 style="text-align: left;margin: 10px 0;">Sygemeldinger</h2>
+                </div>
+
+                <template v-if="absence && absence.length > 0" v-for="ab in absence">
+                    <v-list>
+                        <v-list-tile ripple>
+                            <v-list-tile-content>
+                                <v-list-tile-title v-text="ab.user.name"></v-list-tile-title>
+                                <v-list-tile-subtitle v-text="ab.message"></v-list-tile-subtitle>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-divider></v-divider>
+                    </v-list>
+                </template>
+
                 <div v-if="manualAttendances && manualAttendances.length > 0" class="list-header">
                     <h2 style="text-align: left;margin: 10px 0;">Manuelle indtjekninger</h2>
 
@@ -102,6 +118,7 @@
         data() {
             return {
                 attendances: null,
+                absence: [],
                 manualCheck: false,
                 autoCheck: false,
                 date: null,
@@ -139,6 +156,7 @@
             jumpDays(days) {
                 this.date = moment(this.date).add(days, 'days').format('Y-MM-DD')
 
+                this.fetchAbsence()
                 this.fetchAttendances()
             },
             fetchAttendances() {
@@ -146,6 +164,12 @@
                 axios.get('api/group/' + this.$route.params.id + '/attendance?date=' + this.date)
                     .then(response => {
                         this.attendances = response.data
+                    })
+            },
+            fetchAbsence() {
+                axios('/api/group/' + this.$route.params.id + '/absence?date=' + this.date)
+                    .then(response => {
+                        this.absence = response.data
                     })
             },
             saveAttendanceRegistration() {
@@ -165,6 +189,7 @@
         },
 
         mounted() {
+            this.fetchAbsence()
             this.fetchAttendances()
         }
     }
